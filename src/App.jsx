@@ -12,6 +12,18 @@ import kakaTravellersLogo from "./assets/kaka-travellers.png";
 import mobileTopBlob from "./assets/mobile-top-blob.png";
 import mobileBg from "./assets/mobile-bg.png";
 
+const PRELOAD_IMAGES = [
+  heroMatatu,
+  whyTokea,
+  footerIcon,
+  superMetroLogo,
+  CityShuttleLogo,
+  gtsLogo,
+  kakaTravellersLogo,
+  mobileTopBlob,
+  mobileBg,
+];
+
 const SACCO_LOGOS = {
   "Super Metro": superMetroLogo,
   "City Shuttle": CityShuttleLogo,
@@ -947,6 +959,20 @@ function Footer({ setPage }) {
 export default function App() { 
   const [page, setPage] = useState("Home"); 
   const [user, setUser] = useState(null); 
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    Promise.all(
+      PRELOAD_IMAGES.map(
+        (src) =>
+          new Promise((resolve) => {
+            const img = new Image();
+            img.onload = resolve;
+            img.onerror = resolve;
+            img.src = src;
+          })
+      )
+    ).then(() => setReady(true));
+  }, []);
  
   function handleLogout() { setUser(null); setPage("Home"); } 
  
@@ -967,18 +993,23 @@ export default function App() {
     } 
   }; 
  
-  return ( 
+   return ( 
     <> 
-      <link rel="stylesheet" 
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /> 
-      <link rel="stylesheet" 
-href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" /> 
-      <div className="app"> 
-        <Navbar page={page} setPage={setPage} user={user} onLogout={handleLogout} /> 
-        <main className="main">{renderPage()}</main> 
-        <Footer setPage={setPage} /> 
-        <BottomNav page={page} setPage={setPage} user={user} /> 
-      </div> 
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" /> 
+      <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800;900&display=swap" /> 
+      {!ready ? ( 
+        <div className="loading-screen"> 
+          <div className="loading-spinner" /> 
+          <span>Loading Tokea…</span> 
+        </div> 
+      ) : ( 
+        <div className="app"> 
+          <Navbar page={page} setPage={setPage} user={user} onLogout={handleLogout} /> 
+          <main className="main">{renderPage()}</main> 
+          <Footer setPage={setPage} /> 
+          <BottomNav page={page} setPage={setPage} user={user} /> 
+        </div> 
+      )} 
     </> 
   ); 
 }
