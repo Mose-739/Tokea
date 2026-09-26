@@ -11,8 +11,10 @@ import gtsLogo from "./assets/gts-logo.png";
 import kakaTravellersLogo from "./assets/kaka-travellers.png";
 import mobileTopBlob from "./assets/mobile-top-blob.png";
 import mobileBg from "./assets/mobile-bg.png";
+import tokeaIcon from "./assets/tokea-icon.png";
 
 const PRELOAD_IMAGES = [
+  tokeaIcon,
   heroMatatu,
   whyTokea,
   footerIcon,
